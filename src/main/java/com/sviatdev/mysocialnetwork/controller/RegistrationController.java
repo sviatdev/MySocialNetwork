@@ -16,7 +16,6 @@ public class RegistrationController {
 
     private final UserRepo userRepo;
 
-    @Autowired
     public RegistrationController(UserRepo userRepo) {
         this.userRepo = userRepo;
     }

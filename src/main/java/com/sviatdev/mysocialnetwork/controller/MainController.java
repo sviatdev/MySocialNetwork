@@ -1,4 +1,4 @@
-package com.sviatdev.mysocialnetwork;
+package com.sviatdev.mysocialnetwork.controller;
 
 import com.sviatdev.mysocialnetwork.domain.Message;
 import com.sviatdev.mysocialnetwork.repos.MessageRepo;
@@ -11,38 +11,39 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @Controller
-public class GreetingsController {
+public class MainController {
     private final MessageRepo messageRepo;
 
     @Autowired
-    public GreetingsController(MessageRepo messageRepo) {
+    public MainController(MessageRepo messageRepo) {
         this.messageRepo = messageRepo;
     }
 
     @GetMapping("/")
-    public String greeting(Map<String, Object> map) {
+    public String greeting(Map<String, Object> model) {
         return "greeting";
     }
 
     @GetMapping("/main")
-    public String main(Map<String, Object> map) {
+    public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
-        map.put("messages", messages);
+        model.put("messages", messages);
         return "main";
     }
 
     @PostMapping("/main")
-    public String addMessage(@RequestParam String text, @RequestParam String tag, Map<String, Object> map) {
+    public String add(@RequestParam String text, @RequestParam String tag, Map<String, Object> model) {
         Message message = new Message(text, tag);
         messageRepo.save(message);
 
         Iterable<Message> messages = messageRepo.findAll();
-        map.put("messages", messages);
+
+        model.put("messages", messages);
         return "main";
     }
 
     @PostMapping("filter")
-    public String filter(@RequestParam String filter, Map<String, Object> map) {
+    public String filter(@RequestParam String filter, Map<String, Object> model) {
         Iterable<Message> messages;
         if (filter != null && !filter.isEmpty()) {
             messages = messageRepo.findByTag(filter);
@@ -50,7 +51,7 @@ public class GreetingsController {
             messages = messageRepo.findAll();
         }
 
-        map.put("messages", messages);
+        model.put("messages", messages);
 
         return "main";
     }

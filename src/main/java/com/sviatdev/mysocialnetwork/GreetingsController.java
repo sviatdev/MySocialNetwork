@@ -4,13 +4,10 @@ import com.sviatdev.mysocialnetwork.domain.Message;
 import com.sviatdev.mysocialnetwork.repos.MessageRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -22,21 +19,19 @@ public class GreetingsController {
         this.messageRepo = messageRepo;
     }
 
-    @GetMapping("/greeting")
-    public String greeting(@RequestParam(name = "name", required = false, defaultValue = "World")
-                                   String name, Map<String, Object> map) {
-        map.put("name", name);
+    @GetMapping("/")
+    public String greeting(Map<String, Object> map) {
         return "greeting";
     }
 
-    @GetMapping
+    @GetMapping("/main")
     public String main(Map<String, Object> map) {
         Iterable<Message> messages = messageRepo.findAll();
         map.put("messages", messages);
         return "main";
     }
 
-    @PostMapping
+    @PostMapping("/main")
     public String addMessage(@RequestParam String text, @RequestParam String tag, Map<String, Object> map) {
         Message message = new Message(text, tag);
         messageRepo.save(message);
